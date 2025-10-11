@@ -1,0 +1,2 @@
+﻿// Klasa i obiekt
+
