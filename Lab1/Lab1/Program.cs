@@ -2,8 +2,8 @@
 const int requiredAgeEntry = 14;
 const int requiredAgeBuySim = 18;
 const string accessDeniedEntryMessage = "You have to be at least 14 years old to enter my shop";
-const string accessDeniedBuySim = "You have to be at least 18 years old to buy sim card. Welcome";
-const string accessAllowed = "Welcome to my shop";
+const string accessAllowedWithoutBuySim = "You have to be at least 18 years old to buy sim card. Welcome";
+const string accessAllowedMessage = "Welcome to my shop";
 
 var age = 0;
 var success = false;
@@ -20,10 +20,10 @@ switch (age)
         Console.WriteLine(accessDeniedEntryMessage);
         break;
     case < requiredAgeBuySim:
-        Console.WriteLine(accessDeniedBuySim);
+        Console.WriteLine(accessAllowedWithoutBuySim);
         break;
     default:
-        Console.WriteLine(accessAllowed);
+        Console.WriteLine(accessAllowedMessage);
         break;
 }
 
