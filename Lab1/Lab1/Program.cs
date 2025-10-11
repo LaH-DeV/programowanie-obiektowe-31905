@@ -2,7 +2,7 @@
 const int requiredAgeEntry = 14;
 const int requiredAgeBuySim = 18;
 const string accessDeniedEntryMessage = "You have to be at least 14 years old to enter my shop";
-const string accessAllowedWithoutBuySim = "You have to be at least 18 years old to buy sim card. Welcome";
+const string accessAllowedWithoutBuySimMessage = "You have to be at least 18 years old to buy sim card. Welcome";
 const string accessAllowedMessage = "Welcome to my shop";
 
 var age = 0;
@@ -20,7 +20,7 @@ switch (age)
         Console.WriteLine(accessDeniedEntryMessage);
         break;
     case < requiredAgeBuySim:
-        Console.WriteLine(accessAllowedWithoutBuySim);
+        Console.WriteLine(accessAllowedWithoutBuySimMessage);
         break;
     default:
         Console.WriteLine(accessAllowedMessage);
@@ -43,9 +43,22 @@ do
 } while (password != "admin123");
 Console.WriteLine("Logged in successfully");
 
-var fruits = new string[]{"apple", "banana", "peach"};
+var number = 0;
+while (number <= 0)
+{
+    Console.WriteLine("Enter positive number:");
+    number = int.Parse(Console.ReadLine()!);
+}
+
+
+var fruits = new []{"apple", "banana", "peach"};
 foreach (var fruit in fruits)
 {
     Console.WriteLine($"Fruit: {fruit}");
 }
 
+var cities = new []{"Poznań", "Warszawa", "Gdańsk", "Wrocław", "Kraków"};
+foreach (var city in cities)
+{
+    Console.WriteLine(city);
+}
