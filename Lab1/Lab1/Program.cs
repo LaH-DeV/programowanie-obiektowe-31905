@@ -26,3 +26,26 @@ switch (age)
         Console.WriteLine(accessAllowed);
         break;
 }
+
+// Zadanie 2. Pętle
+var count = 0;
+while (count < 5)
+{
+    Console.WriteLine($"Iteration number: {count}");
+    count++;
+}
+
+string? password;
+do
+{
+    Console.WriteLine("Enter your password:");
+    password = Console.ReadLine();
+} while (password != "admin123");
+Console.WriteLine("Logged in successfully");
+
+var fruits = new string[]{"apple", "banana", "peach"};
+foreach (var fruit in fruits)
+{
+    Console.WriteLine($"Fruit: {fruit}");
+}
+
