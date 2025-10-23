@@ -12,11 +12,24 @@ bankaccount.Deposit(250);
 bankaccount.Withdraw(250);
 Console.WriteLine(bankaccount.ReadBalance());
 
-
-class Person(string firstName, int age)
+//
+Animal[] animals = { new Dog(), new Cat() };
+foreach (var animal in animals)
 {
-    private string firstName = firstName;
-    private int age = age;
+    animal.MakeSound();
+}
+//
+
+class Person
+{
+    private string firstName;
+    private int age;
+
+    public Person(string firstName, int age)
+    {
+        this.firstName = firstName;
+        this.age = age;
+    }
 
     public void IntroduceYourself()
     {
@@ -26,9 +39,15 @@ class Person(string firstName, int age)
 }
 
 
-class BankAccount(double balance)
+class BankAccount
 {
-    private double balance  = balance;
+    private double balance;
+
+    public BankAccount(double balance)
+    {
+        this.balance = balance;
+    }
+
     public void Deposit(double amount) { balance += amount; }
     public double ReadBalance() { return balance; }
 
@@ -48,15 +67,32 @@ class BankAccount(double balance)
 class Animal
 {
     public void Eat() => Console.WriteLine("The animal is eating...");
+    public virtual void MakeSound() => Console.WriteLine("The animal makes a sound...");
 }
 
 class Dog : Animal
 {
-    public void Bark() => Console.WriteLine("Woof woof!");
+    public override void MakeSound() => Console.WriteLine("Woof woof!");
 }
 
 class Cat : Animal
 {
-    public void Meow() => Console.WriteLine("Meow meow!");
+    public override void MakeSound() => Console.WriteLine("Meow meow!");
 }
 
+
+class Vehicle
+{
+    public virtual void Start() => Console.WriteLine("The vehicle is starting...");
+}
+
+class Car : Vehicle
+{
+    public override void Start() => Console.WriteLine("The car is starting...");
+    public void Move() => Console.WriteLine("The car is moving...");
+}
+
+class ElectricCar : Car
+{
+    public void Charge() => Console.WriteLine("Battery is charging...");
+}
