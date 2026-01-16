@@ -15,269 +15,193 @@ vehicles.AddRange(cars);
 vehicles.AddRange(bikes);
 
 var continueApp = true;
-do
-{
-    Console.WriteLine("--- MENU ---");
-    Console.WriteLine("1. Vehicle list");
-    Console.WriteLine("2. New vehicle");
-    Console.WriteLine("3. Remove vehicle");
-    Console.WriteLine("4. Update vehicle");
-    Console.WriteLine("0. Exit");
-    var option = Console.ReadKey().KeyChar;
-    switch (option)
-    {
-        case '0':
+do {
+    var option = GetMenuOption("--- MENU ---", ["Exit", "Vehicle list", "New vehicle", "Remove vehicle", "Update vehicle"]);
+    switch (option) {
+        case 0: {
             Console.WriteLine("Bye bye...");
             continueApp = false;
             break;
-        case '1':
-            ShowVehicles();
+        }
+        case 1: {
+            Console.WriteLine("List of vehicles");
+            foreach (var vehicle in vehicles) vehicle.ShowMe();
             break;
-        case '2':
-            AddNewVehicle();
+        }
+        case 2: {
+            var type = GetVehicleType();
+            if (type == 0) break;
+            else if (type == 1) {
+                var (model, engine, year) = GetCarInfo();
+                if (string.IsNullOrWhiteSpace(model) || string.IsNullOrWhiteSpace(engine) || year == null) break;
+                AddNewVehicle(new Car(engine, model, year.Value), cars, "cars.json");
+            } else if (type == 2) {
+                var (engine, bikeType) = GetBikeInfo();
+                if (string.IsNullOrWhiteSpace(engine) || string.IsNullOrWhiteSpace(bikeType)) break;
+                AddNewVehicle(new Bike(engine, bikeType), bikes, "bikes.json");
+            }
             break;
-        case '3':
-            RemoveVehicle();
+        }
+        case 3: {
+            var type = GetVehicleType();
+            if (type == 0) break;
+            if (type == 1) {
+                var car = FindCar();
+                if (car != null) RemoveVehicle(car, cars, "cars.json");
+            }
+            if (type == 2) {
+                var bike = FindBike();
+                if (bike != null) RemoveVehicle(bike, bikes, "bikes.json");
+            }
             break;
-        case '4':
-            UpdateVehicle();
+        }
+        case 4: {
+            var type = GetVehicleType();
+            if (type == 0) break;
+            if (type == 1) {
+                var car = FindCar();
+                if (car == null) break;
+                EditVehicle(car,
+                    ["Model", "Engine", "Year"],
+                    [
+                        (c, v) => c.SetModel(v),
+                        (c, v) => c.SetEngine(v),
+                        (c, v) => c.SetYear(int.Parse(v))
+                    ],
+                    cars,
+                    "cars.json"
+                );
+            }
+            if (type == 2) {
+                var bike = FindBike();
+                if (bike == null) break;
+                EditVehicle(bike,
+                    ["Engine", "Bike type"],
+                    [
+                        (b, v) => b.SetEngine(v),
+                        (b, v) => b.SetBikeType(v)
+                    ],
+                    bikes,
+                    "bikes.json"
+                );
+            }
             break;
-        default:
-            Console.WriteLine("Unknown option");
-            break;
+        }
     }
 } while (continueApp);
 
 return;
 
-int GetVehicleType()
-{
-    Console.WriteLine("1 for car, 2 for bike, 0 to abort");
-    var success = int.TryParse(Console.ReadLine(), out var option);
-    if (success)
-    {
-        if (option is >= 0 and <= 2) return option;
-    }
+void AddNewVehicle<T>(T vehicle, List<T> list, string filePath) where T : Vehicle {
+    list.Add(vehicle);
+    SaveVehicles(list, filePath, $"{typeof(T).Name} added");
+}
 
-    Console.WriteLine("Unknown option");
+void RemoveVehicle<T>(T vehicle, List<T> list, string filePath) where T : Vehicle {
+    list.Remove(vehicle);
+    SaveVehicles(list, filePath, $"{typeof(T).Name} removed");
+}
+
+Car? FindCar() {
+    Console.WriteLine("Cars are identified by model, engine and year: ");
+    var (model, engine, year) = GetCarInfo();
+    if (string.IsNullOrWhiteSpace(model) || string.IsNullOrWhiteSpace(engine) || year == null) return null;
+    var car = cars.Find(c => c.Model.Equals(model) && c.Engine.Equals(engine) && c.Year.Equals(year));
+    if (car == null) Console.WriteLine("Car not found");
+    return car;
+}
+
+Bike? FindBike() {
+    Console.WriteLine("Bikes are identified by engine and bike type: ");
+    var (engine, bikeType) = GetBikeInfo();
+    if (string.IsNullOrWhiteSpace(engine) || string.IsNullOrWhiteSpace(bikeType)) return null;
+    var bike = bikes.Find(v => v.Engine.Equals(engine) && v.BikeType == bikeType);
+    if (bike == null) Console.WriteLine("Bike not found");
+    return bike;
+}
+
+(string? model, string? engine, int? year) GetCarInfo() {
+    var model = ReadString("Model: ");
+    var engine = ReadString("Engine: ");
+    var year = ReadInt("Year: ");
+    if (string.IsNullOrWhiteSpace(model) || string.IsNullOrWhiteSpace(engine) || year == null) {
+        Console.WriteLine("Invalid model, engine or year");
+        return (null, null, null);
+    }
+    return (model, engine, year);
+}
+
+(string? engine, string? bikeType) GetBikeInfo() {
+    var engine = ReadString("Engine: ");
+    var bikeType = ReadString("Bike type: ");
+    if (string.IsNullOrWhiteSpace(engine) || string.IsNullOrWhiteSpace(bikeType)) {
+        Console.WriteLine("Invalid engine or bike type");
+        return (null, null);
+    }
+    return (engine, bikeType);
+}
+
+string? ReadString(string prompt) {
+    Console.WriteLine(prompt);
+    return Console.ReadLine();
+}
+
+int? ReadInt(string prompt) {
+    Console.WriteLine(prompt);
+    var success = int.TryParse(Console.ReadLine(), out var value);
+    if (success) return value;
+    return null;
+}
+
+int GetVehicleType() {
+    var option = GetMenuOption("Select vehicle type", ["Abort", "Car", "Bike"]);
+    if (option is >= 0 and <= 2) return option;
     return 0;
 }
 
-
-void AddNewVehicle()
-{
-    switch (GetVehicleType())
-    {
-        case 1:
-            AddNewCar();
-            break;
-        case 2:
-            AddNewBike();
-            break;
+int GetMenuOption(string title, string[] options) {
+    Console.WriteLine(title);
+    for (var i = 0; i < options.Length; i++) {
+        Console.WriteLine($"{i}. {options[i]}");
     }
+    var success = int.TryParse(Console.ReadKey().KeyChar.ToString(), out var option);
+    Console.WriteLine();
+    if (success) {
+        if (option >= 0 && option < options.Length) return option;
+    }
+    Console.WriteLine("Unknown option");
+    return -1;
 }
 
-void AddNewBike()
-{
-    Console.WriteLine("Engine: ");
-    var engine = Console.ReadLine();
-    Console.WriteLine("Bike type: ");
-    var bikeType = Console.ReadLine();
-    if (string.IsNullOrWhiteSpace(engine) || string.IsNullOrWhiteSpace(bikeType))
-    {
-        Console.WriteLine("Invalid engine or bike type");
-        return;
-    }
-
-    var bike = new Bike(engine, bikeType);
-    bikes.Add(bike);
-    var json = JsonSerializer.Serialize(bikes);
-    File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "bikes.json"), json);
-    vehicles.Clear();
-    vehicles.AddRange(cars);
-    vehicles.AddRange(bikes);
-}
-
-void AddNewCar()
-{
-    Console.WriteLine("Model: ");
-    var model = Console.ReadLine();
-    Console.WriteLine("Engine: ");
-    var engine = Console.ReadLine();
-    Console.WriteLine("Year: ");
-    var success = int.TryParse(Console.ReadLine(), out var year);
-    if (string.IsNullOrWhiteSpace(model) || string.IsNullOrWhiteSpace(engine) || !success)
-    {
-        Console.WriteLine("Invalid model, engine or year");
-        return;
-    }
-
-    var car = new Car(engine, model, year);
-    cars.Add(car);
-    var json = JsonSerializer.Serialize(cars);
-    File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "cars.json"), json);
-    vehicles.Clear();
-    vehicles.AddRange(cars);
-    vehicles.AddRange(bikes);
-}
-
-void RemoveVehicle()
-{
-    switch (GetVehicleType())
-    {
-        case 1:
-            RemoveCar();
-            break;
-        case 2:
-            RemoveBike();
-            break;
-    }
-}
-
-void RemoveBike()
-{
-    Console.WriteLine("Bikes are identified by engine and bike type: ");
-    Console.WriteLine("Engine: ");
-    var engine = Console.ReadLine();
-    Console.WriteLine("Bike type: ");
-    var bikeType = Console.ReadLine();
-    if (string.IsNullOrWhiteSpace(engine) || string.IsNullOrWhiteSpace(bikeType))
-    {
-        Console.WriteLine("Invalid engine  or bike type");
-        return;
-    }
-
-    var bike = bikes.Find(v => v.Engine.Equals(engine) && v.BikeType == bikeType);
-    if (bike == null)
-    {
-        Console.WriteLine("Bike not found");
-        return;
-    }
-    bikes.Remove(bike);
-    var json = JsonSerializer.Serialize(bikes);
-    File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "bikes.json"), json);
-    vehicles.Clear();
-    vehicles.AddRange(cars);
-    vehicles.AddRange(bikes);
-}
-
-void RemoveCar()
-{
-    Console.WriteLine("Cars are identified by model, engine and year: ");
-    Console.WriteLine("Model: ");
-    var model = Console.ReadLine();
-    Console.WriteLine("Engine: ");
-    var engine = Console.ReadLine();
-    Console.WriteLine("Year: ");
-    var success = int.TryParse(Console.ReadLine(), out var year);
-    if (string.IsNullOrWhiteSpace(model) || string.IsNullOrWhiteSpace(engine) || !success)
-    {
-        Console.WriteLine("Invalid model, engine or year");
-        return;
-    }
-
-    var car = cars.Find(c => c.Model.Equals(model) && c.Engine.Equals(engine) && c.Year.Equals(year));
-    if (car == null)
-    {
-        Console.WriteLine("Car not found");
-        return;
-    }
-    cars.Remove(car);
-    var json = JsonSerializer.Serialize(cars);
-    File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "cars.json"), json);
-    vehicles.Clear();
-    vehicles.AddRange(cars);
-    vehicles.AddRange(bikes);
-}
-
-void UpdateVehicle()
-{
-    switch (GetVehicleType())
-    {
-        case 1:
-            UpdateCar();
-            break;
-        case 2:
-            UpdateBike();
-            break;
-    }
-}
-
-void UpdateBike()
-{
-   
-}
-
-void UpdateCar()
-{
-    Console.WriteLine("Cars are identified by model, engine and year: ");
-    Console.WriteLine("Model: ");
-    var model = Console.ReadLine();
-    Console.WriteLine("Engine: ");
-    var engine = Console.ReadLine();
-    Console.WriteLine("Year: ");
-    var success = int.TryParse(Console.ReadLine(), out var year);
-    if (string.IsNullOrWhiteSpace(model) || string.IsNullOrWhiteSpace(engine) || !success)
-    {
-        Console.WriteLine("Invalid model, engine or year");
-        return;
-    }
-
-    var car = cars.Find(c => c.Model.Equals(model) && c.Engine.Equals(engine) && c.Year.Equals(year));
-    if (car == null)
-    {
-        Console.WriteLine("Car not found");
-        return;
-    }
-
-    var edit = true;
-    var didChange = false;
-    do
-    {
-        Console.WriteLine("--- EDIT CAR MENU ---");
-        Console.WriteLine("1. Edit model");
-        Console.WriteLine("2. Edit engine");
-        Console.WriteLine("3. Edit year");
-        Console.WriteLine("0. Cancel");
-        var option = Console.ReadKey().KeyChar;
-        switch (option)
-        {
-            case '0':
-                edit = false;
-                break;
-            case '1':
-                Console.WriteLine("Model: ");
-                var newModel = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(newModel))
-                {
-                    Console.WriteLine("Invalid model, engine or year");
-                    break;
-                }
-                car.setModel(newModel);
-                break;
-            case '2':
-                var newEngine = Console.ReadLine();
-                if (newEngine != car.Engine)
-                    //
-                    break;
-            default:
-                Console.WriteLine("Unknown option");
-                break;
+void EditVehicle<T>(T vehicle, string[] fields, Action<T, string>[] setters, List<T> list, string filePath) where T : Vehicle {
+    bool edit = true;
+    bool didChange = false;
+    do {
+        int option = GetMenuOption("--- EDIT MENU ---", [.. fields.Prepend("Done / Cancel")]);
+        if (option < 0 || option > fields.Length) {
+            Console.WriteLine("Valid option required");
+            continue;
         }
+        if (option == 0) { edit = false; continue; }
+        string? newValue = ReadString(fields[option - 1] + ": ");
+        if (string.IsNullOrWhiteSpace(newValue)) {
+            Console.WriteLine("Invalid input");
+            continue;
+        }
+        setters[option - 1](vehicle, newValue);
+        didChange = true;
     } while (edit);
-    if (!didChange) return;
-    var json = JsonSerializer.Serialize(cars);
-    File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "cars.json"), json);
+
+    if (didChange) SaveVehicles(list, filePath, $"{typeof(T).Name} updated");
+    else Console.WriteLine("No changes made");
+}
+
+
+void SaveVehicles<T>(List<T> list, string filePath, string successMessage) where T : Vehicle {
+    File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), filePath), JsonSerializer.Serialize(list));
     vehicles.Clear();
     vehicles.AddRange(cars);
     vehicles.AddRange(bikes);
+    Console.WriteLine(successMessage);
 }
 
-void ShowVehicles()
-{
-    Console.WriteLine("List of vehicles");
-    foreach (var vehicle in vehicles)
-    {
-        vehicle.ShowMe();
-    }
-}

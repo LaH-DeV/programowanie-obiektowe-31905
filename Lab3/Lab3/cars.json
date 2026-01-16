@@ -1,7 +1,1 @@
-[
-  {
-    "Model": "Rav4",
-    "Year": 2003,
-    "Engine": "2.2D"
-  }
-]
+[{"Model":"Rav4","Year":2003,"IsOn":false,"Engine":"2.2D"},{"Model":"Citroen C5","Year":2009,"IsOn":false,"Engine":"2.0HDi"},{"Model":"Citroen C3","Year":2012,"IsOn":false,"Engine":"1.4"}]

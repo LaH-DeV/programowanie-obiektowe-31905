@@ -23,11 +23,21 @@ public class Car : Vehicle
 
     public override void ShowMe()
     {
-        Console.WriteLine($"Model: {Model}, Year: {year}, Engine: {Engine}");
+        Console.WriteLine($"Car of model: {Model}, engine: {Engine}, year: {Year}");
     }
 
-    public void setModel(string model)
+    public void SetModel(string model)
     {
         Model = model;
+    }
+
+    public void SetEngine(string engine)
+    {
+        base.Engine = engine;
+    }
+
+    public void SetYear(int year)
+    {
+        Year = year;
     }
 }

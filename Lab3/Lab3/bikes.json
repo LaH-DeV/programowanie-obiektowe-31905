@@ -1,6 +1,1 @@
-[
-  {
-    "Engine": "600D",
-    "BikeType": "Cross"
-  }
-]
+[{"BikeType":"Cross","IsOn":false,"Engine":"600D"},{"BikeType":"Tourer","IsOn":false,"Engine":"1000B"}]

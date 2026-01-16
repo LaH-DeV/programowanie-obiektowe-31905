@@ -11,12 +11,22 @@ public class Bike : Vehicle
 
     public override void Start()
     {
-        Console.WriteLine("Unlocked!");
+        Console.WriteLine("Bike is starting");
         base.Start();
     }
 
     public override void ShowMe()
     {
-        Console.WriteLine($"Engine: {Engine},  Bike: {BikeType}");
+        Console.WriteLine($"Bike of type: {BikeType}, engine: {Engine}");
+    }
+
+    public void SetBikeType(string bikeType)
+    {
+        BikeType = bikeType;
+    }
+
+    public void SetEngine(string engine)
+    {
+        Engine = engine;
     }
 }
