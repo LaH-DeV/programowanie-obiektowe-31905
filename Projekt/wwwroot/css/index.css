@@ -1,0 +1,256 @@
+:root {
+  --bg-light: #f6f7fb;
+  --bg-dark: oklch(21% 0.034 264.665);
+  --clr-light: #f5f5f4;
+  --clr-dark: #111827;
+  --panel-bg-light: #fffffb;
+  --panel-bg-dark: oklch(16% 0.028 261.692);
+  --border-light: #e5e7eb;
+  --border-dark: oklch(11% 0.034 264.665);
+  --primary: oklch(42.4% 0.199 265.638);
+  --primary-light: oklch(62.3% 0.214 259.815);
+  --success: #16a34a;
+  --danger: #dc2626;
+  --muted: #6b7280;
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input:focus,
+input:focus-visible,
+[contenteditable]:focus,
+[contenteditable]:focus-visible {
+  outline: 1px solid var(--primary) !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: light-dark(var(--clr-dark), var(--clr-light));
+  background-color: light-dark(var(--bg-light), var(--bg-dark));
+}
+
+.container {
+  max-width: clamp(300px, 600px, 90%);
+  margin: 60px auto;
+  padding: 24px;
+}
+
+.card {
+  background-color: light-dark(var(--panel-bg-light), var(--panel-bg-dark));
+  
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+h1 {
+  margin: 0 0 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+h1 span {
+  padding: 0.25rem;
+}
+
+a {
+  text-decoration: none;
+  color: light-dark(var(--primary), var(--primary-light));
+}
+
+
+/* form */
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid light-dark(var(--border-light), var(--border-dark));
+  background-color: light-dark(var(--bg-light), var(--bg-dark));
+  font-size: 14px;
+}
+
+.form input[type="text"] {
+  flex: 1;
+}
+
+.form>input[name="name"],
+.form>.name-input {
+  flex-grow: 1;
+}
+
+.form>.name-input {
+  position: relative;
+}
+
+.form>.name-input>input[name="name"] {
+  width: 100%;
+}
+
+#suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: light-dark(var(--bg-light), var(--bg-dark));
+  border: 1px dashed light-dark(var(--border-light), var(--border-dark));
+  border-radius: 0.5rem;
+}
+
+#suggestions li {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+#suggestions li:hover {
+  background: light-dark(#eef2ff, oklch(18% 0.028 261.692));
+}
+
+.form button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0 16px;
+  cursor: pointer;
+}
+
+.form button:hover {
+  opacity: 0.9;
+}
+
+/* list */
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid light-dark(#f0f0f0, oklch(18% 0.028 261.692));
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item span {
+  padding: 0.25rem;
+}
+
+.item.bought span {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.qty {
+  font-size: 12px;
+  background: light-dark(#eef2ff, oklch(18% 0.028 261.692));
+  color: light-dark(var(--primary), var(--primary-light));
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* buttons */
+
+.actions button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 6px;
+}
+
+.actions .mark {
+  color: var(--success);
+}
+
+.actions .unmark {
+  color: var(--muted);
+}
+
+.actions .delete {
+  color: var(--danger);
+}
+
+#lists {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.list-actions button.delete {
+  font-size: 0.7rem;
+  color: currentColor;
+  opacity: 0.4;
+}
+
+.list-actions button.delete:hover {
+  color: var(--danger);
+  opacity: 1;
+}
+
+.shopping-list {
+  padding: 0.75rem;
+  text-decoration: none;
+}
+
+.shopping-list:hover {
+  border-radius: 0.5rem;
+  background-color: light-dark(#f9f9f9, oklch(18% 0.028 261.692));
+}
+
+.shopping-list a {
+  color: light-dark(var(--primary), var(--primary-light));
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.visually-hidden, .visually-hidden-focusable:not(:focus):not(:focus-within) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+[contenteditable] {
+  cursor: pointer;
+  border-radius: 0.5rem;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista zakupów</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <script type="module" src="./js/list.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="heading">
+                <a href="/" class="back-link" title="Powrót do list">↩ 🛒</a>
+                <div class="actions list-actions d-none"><button type="button" class="delete"
+                        data-action="deleteList">Usuń listę ✖</button></div>
+            </div>
+            <h1> Lista: <span data-attribute="listName" contenteditable style="color: var(--primary)"></span></h1>
+            <form class="form" style="display: none;">
+                <div class="name-input">
+                    <label for="name" class="visually-hidden">Produkt</label>
+                    <input id="name" name="name" placeholder="Produkt" required autocomplete="off" autofocus />
+                    <div id="suggestions" class="d-none"></div>
+                </div>
+                <label for="quantity" class="visually-hidden">Ilość</label>
+                <input id="quantity" name="quantity" type="number" value="1" min="1" required />
+                <button type="submit">Dodaj</button>
+            </form>
+            <ul id="list" style="display: none;"></ul>
+            <div id="alert" style="display: none;"></div>
+        </div>
+    </div>
+
+    <template id="item-template">
+        <li>
+            <div class="item">
+                <span data-attribute="name" contenteditable></span>
+                <span data-attribute="quantity" class="qty" contenteditable></span>
+            </div>
+            <div class="actions">
+                <button type="button" class="mark" data-action="mark" title="Oznacz jako kupione">✔</button>
+                <button type="button" class="unmark" data-action="unmark" title="Usuń oznaczenie">↩</button>
+                <button type="button" class="delete" data-action="delete" title="Usuń z listy">✖</button>
+            </div>
+        </li>
+    </template>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listy zakupowe</title>
+  <link rel="stylesheet" href="/css/index.css" />
+  <script type="module" src="./js/index.js"></script>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="card">
+      <h1>🛒 Moje listy</h1>
+      <form class="form">
+        <label for="name" class="visually-hidden">Nazwa listy</label>
+        <input id="name" name="name" placeholder="Nowa lista" autocomplete="off" autofocus />
+        <button type="submit">+</button>
+      </form>
+      <ul id="lists"></ul>
+      <div id="alert" style="display: none;"></div>
+    </div>
+  </div>
+
+</body>
+
+</html>

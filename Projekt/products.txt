@@ -1,0 +1,166 @@
+chleb
+bułka
+bagietka
+chleb tostowy
+kajzerka
+mleko
+mleko bez laktozy
+mleko roślinne
+jogurt
+jogurt naturalny
+jogurt grecki
+kefir
+maślanka
+śmietana
+masło
+margaryna
+ser żółty
+ser biały
+ser feta
+ser mozzarella
+ser pleśniowy
+twaróg
+jajka
+szynka
+kiełbasa
+parówki
+boczek
+salami
+kurczak
+pierś z kurczaka
+udko z kurczaka
+wołowina
+wieprzowina
+mielone
+ryba
+łosoś
+tuńczyk
+makrela
+paluszki rybne
+krewetki
+ryż
+makaron
+spaghetti
+penne
+lasagne
+kasza
+kasza gryczana
+kasza jaglana
+płatki owsiane
+płatki kukurydziane
+mąka
+mąka pszenna
+mąka żytnia
+cukier
+cukier puder
+cukier trzcinowy
+sól
+pieprz
+papryka przyprawa
+curry
+oregano
+bazylia
+czosnek granulowany
+olej
+olej rzepakowy
+olej słonecznikowy
+oliwa z oliwek
+ocet
+ketchup
+musztarda
+majonez
+sos pomidorowy
+sos sojowy
+koncentrat pomidorowy
+pomidory
+pomidory w puszce
+ogórek
+ogórek kiszony
+papryka
+cebula
+czosnek
+por
+marchew
+pietruszka
+seler
+ziemniaki
+bataty
+sałata
+rukola
+szpinak
+brokuł
+kalafior
+cukinia
+bakłażan
+kukurydza
+groszek
+fasola
+soczewica
+ciecierzyca
+jabłka
+banany
+gruszki
+pomarańcze
+mandarynki
+cytryny
+limonki
+winogrona
+truskawki
+maliny
+borówki
+ananas
+arbuz
+melon
+awokado
+orzechy
+orzechy włoskie
+orzechy nerkowca
+migdały
+rodzynki
+daktyle
+czekolada
+czekolada mleczna
+czekolada gorzka
+baton
+ciastka
+herbatniki
+biszkopty
+wafle
+cukierki
+lody
+dżem
+miód
+masło orzechowe
+kawa
+kawa mielona
+kawa rozpuszczalna
+herbata
+herbata zielona
+herbata czarna
+herbata owocowa
+woda
+woda gazowana
+sok
+sok pomarańczowy
+sok jabłkowy
+napój
+cola
+lemoniada
+piwo
+wino
+wino czerwone
+wino białe
+chipsy
+paluszki
+krakersy
+popcorn
+pizza mrożona
+pierogi
+frytki
+warzywa mrożone
+owoce mrożone
+zupa
+rosół
+barszcz
+żurek
+bulion
