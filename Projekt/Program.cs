@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Projekt.Data;
-using Projekt.Models;
-using Projekt.DTOs;
 using Projekt.Endpoints;
 using Projekt.Seed;
 using Projekt.Services;
