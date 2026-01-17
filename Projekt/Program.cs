@@ -8,7 +8,7 @@ using Projekt.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(
-    o => o.UseSqlite("Data Source=shopping.db"));
+    o => o.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
     
 builder.Services.AddSingleton<ProductSuggestionsService>();
 
@@ -17,8 +17,9 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.CreateScope();
     DbSeeder.Seed(scope.ServiceProvider);
 }
 

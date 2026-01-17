@@ -20,6 +20,6 @@ public class ProductSuggestionsService
                 .Select(line => line.Trim())
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList()
-            : new List<string>();
+            : [];
     }
 }
