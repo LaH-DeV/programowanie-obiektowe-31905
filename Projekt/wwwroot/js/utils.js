@@ -15,7 +15,11 @@ export function showError(error, dom) {
 export async function request(url, options) {
     try {
         const res = await fetch(url, options);
-        if (!res.ok) throw new Error(res.statusText);
+        if (res.status === 400) {
+            const err = await tryToReadError(res);
+            if (err != null) return err;
+            else throw new Error(res.statusText);
+        } else if (!res.ok) throw new Error(res.statusText);
         const contentType = res.headers.get("Content-Type");
         if (typeof contentType === "string" && contentType.includes("application/json")) {
             return { data: await res.json() };
@@ -27,5 +31,13 @@ export async function request(url, options) {
     } catch (err) {
         console.error(err);
         return { error: err };
+    }
+}
+
+async function tryToReadError(res) {
+    try {
+        return await res.json(); // { error: string }
+    } catch {
+        return null;
     }
 }

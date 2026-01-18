@@ -18,6 +18,9 @@ document.body.addEventListener("click", async (event) => {
     const id = button.getAttribute("data-id");
     if (actions.includes(action)) event.preventDefault();
     switch (action) {
+        case "markList":
+            markList();
+            break;
         case "deleteList":
             deleteList();
             break;
@@ -69,6 +72,12 @@ if (currentListId) {
     reportError("Brak identyfikatora listy (id)",);
 }
 
+async function markList() {
+    const { error } = await request(`/lists/${currentListId}/mark`, { method: "PUT" });
+    if (error != null) reportError(error);
+    else loadList();
+}
+
 async function deleteList() {
     const { error } = await request(`/lists/${currentListId}`, { method: "DELETE" });
     if (error != null) reportError(error);
@@ -86,6 +95,14 @@ async function loadList() {
         document.querySelector(".actions.list-actions").classList.remove("d-none");
         list.removeAttribute("style");
         form.removeAttribute("style");
+    }
+}
+
+function handleMarkAllClick(items) {
+    if (items.length > 0 && areAllItemsBought()) {
+        document.querySelector(".actions.list-actions .mark").classList.add("d-none");
+    } else {
+        document.querySelector(".actions.list-actions .mark").classList.remove("d-none");
     }
 }
 
@@ -141,6 +158,13 @@ async function editItem(data) {
     });
 }
 
+function areAllItemsBought() {
+    for (const item of items.values()) {
+        if (!item.isBought) return false;
+    }
+    return true;
+}
+
 function renderItems(items) {
     cacheItems(items);
     list.innerHTML = "";
@@ -165,6 +189,7 @@ function renderItems(items) {
         newHtml += li.outerHTML;
     });
     list.innerHTML = newHtml;
+    handleMarkAllClick(items);
 }
 
 

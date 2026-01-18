@@ -198,7 +198,12 @@ li:last-child {
 }
 
 .actions .delete {
-  color: var(--danger);
+  --clr: var(--danger);
+  color: var(--clr);
+}
+
+.actions .mark {
+  --clr: var(--success);
 }
 
 #lists {
@@ -207,14 +212,14 @@ li:last-child {
   gap: 0.5rem;
 }
 
-.list-actions button.delete {
+.list-actions button {
   font-size: 0.7rem;
   color: currentColor;
   opacity: 0.4;
 }
 
-.list-actions button.delete:hover {
-  color: var(--danger);
+.list-actions button:hover {
+  color: var(--clr);
   opacity: 1;
 }
 

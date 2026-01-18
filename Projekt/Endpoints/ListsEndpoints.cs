@@ -34,14 +34,10 @@ public static class ListsEndpoints {
       list ?
       Results.Ok(list) :
       Results.NotFound());
+
     app.MapPost("/lists",
       async (CreateShoppingListDto dto, AppDbContext db) => {
-        if (string.IsNullOrWhiteSpace(dto.Name))
-          return Results.BadRequest("Name is required");
-
-        var list = new ShoppingList {
-          Name = dto.Name.Trim()
-        };
+        var list = new ShoppingList(dto.Name.Trim());
 
         db.Lists.Add(list);
         await db.SaveChangesAsync();
@@ -57,14 +53,29 @@ public static class ListsEndpoints {
       if (list == null)
         return Results.NotFound();
 
-      if (string.IsNullOrWhiteSpace(dto.Name))
-        return Results.BadRequest("Name is required");
-
-      list.Name = dto.Name.Trim();
+      list.UpdateName(dto.Name.Trim());
       await db.SaveChangesAsync();
       return Results.Ok(new {
         list.Id, list.Name
       });
+    });
+
+    app.MapPut("/lists/{listId}/mark", async (int listId, AppDbContext db) => {
+      var list = await db.Lists.FindAsync(listId);
+      if (list == null)
+        return Results.NotFound();
+
+      await db.Items
+        .Where(i => i.ShoppingListId == listId && !i.IsBought)
+        .ToListAsync()
+        .ContinueWith(t => {
+          foreach (var item in t.Result)
+          {
+              item.MarkAsBought();
+          }
+        });
+      await db.SaveChangesAsync();
+      return Results.Ok();
     });
 
     app.MapGet("/lists/{listId}/items",
@@ -77,24 +88,11 @@ public static class ListsEndpoints {
         .Where(i => i.ShoppingListId == listId)
         .ToListAsync());
 
-    app.MapPost(
-      "/lists/{listId}/items",
-      async (int listId, CreateShoppingItemDto dto, AppDbContext db) => {
-        if (string.IsNullOrWhiteSpace(dto.Name))
-          return Results.BadRequest("Name is required");
-
-        if (dto.Quantity <= 0)
-          return Results.BadRequest("Quantity must be > 0");
-
+    app.MapPost("/lists/{listId}/items", async (int listId, CreateShoppingItemDto dto, AppDbContext db) => {
         var listExists = await db.Lists.AnyAsync(l => l.Id == listId);
-        if (!listExists)
-          return Results.NotFound("List not found");
+        if (!listExists) return Results.NotFound();
 
-        var item = new ShoppingItem {
-          Name = dto.Name.Trim(),
-            Quantity = dto.Quantity,
-            ShoppingListId = listId
-        };
+        var item = new ShoppingItem(dto.Name.Trim(), dto.Quantity, listId);
 
         db.Items.Add(item);
         await db.SaveChangesAsync();
@@ -102,7 +100,7 @@ public static class ListsEndpoints {
         return Results.Created($"/items/{item.Id}", new {
           item.Id
         });
-      });
+    });
 
     app.MapDelete("/lists/{listId}", async (int listId, AppDbContext db) => {
       var list = await db.Lists.FindAsync(listId);

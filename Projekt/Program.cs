@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Diagnostics;
 using Projekt.Data;
 using Projekt.Endpoints;
-using Projekt.Seed;
 using Projekt.Services;
 
 
@@ -17,15 +17,26 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-if (app.Environment.IsDevelopment())
-{
-    using var scope = app.Services.CreateScope();
-    DbSeeder.Seed(scope.ServiceProvider);
-}
-
 app.MapListsEndpoints();
 app.MapItemsEndpoints();
 app.MapSuggestionsEndpoints();
+
+app.UseExceptionHandler(app =>
+{
+    app.Run(async context =>
+    {
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+        if (exception is ArgumentException)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                error = exception.Message
+            });
+        }
+    });
+});
 
 
 app.Run();

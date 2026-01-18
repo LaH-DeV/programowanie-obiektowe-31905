@@ -14,7 +14,10 @@
         <div class="card">
             <div class="heading">
                 <a href="/" class="back-link" title="Powrót do list">↩ 🛒</a>
-                <div class="actions list-actions d-none"><button type="button" class="delete"
+                <div class="actions list-actions d-none">
+                    <button type="button" class="mark"
+                        data-action="markList">Oznacz za zakupioną ✔</button>
+                    <button type="button" class="delete"
                         data-action="deleteList">Usuń listę ✖</button></div>
             </div>
             <h1>Lista: <span data-attribute="listName" contenteditable style="color: var(--primary)"></span></h1>
