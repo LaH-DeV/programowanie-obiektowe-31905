@@ -24,7 +24,31 @@ foreach (var item in t.Result)
 ```
 3. Kolekcje generyczne
 ```cs
+    public List<ShoppingItem> Items { get; private set; } = new();
+    // ...
+    public void AddItem(ShoppingItem item)
+    {
+        Items.Add(item);
+    }
 
+    public bool RemoveItemByName(string name)
+    {
+        var item = Items.FirstOrDefault(i => i.Name == name);
+        if (item != null)
+        {
+            Items.Remove(item);
+            return true;
+        }
+        return false;
+    }
+
+    ///
+    app.MapGet("/lists/{listId}/with-items", async (int listId, AppDbContext db) => {
+      var list = await db.Lists
+        .Include(l => l.Items)
+        .FirstOrDefaultAsync(l => l.Id == listId);
+      return list is not null ? Results.Ok(list) : Results.NotFound();
+    });
 ```
 4. Wszystkie filary obiektowości
 a. Dziedziczenie

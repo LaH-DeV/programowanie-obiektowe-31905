@@ -1,9 +1,15 @@
 namespace Projekt.Models;
 
+using System.Collections.Generic;
+using System.Linq;
+using Projekt.Models;
+
 public class ShoppingList
 {
     public int Id { get; private set; }
     public string Name { get; private set; } = "";
+
+    public List<ShoppingItem> Items { get; private set; } = new();
 
     // EF Core
     protected ShoppingList() { }
@@ -29,5 +35,21 @@ public class ShoppingList
     public void UpdateName(string name)
     {
         SetName(name);
+    }
+
+    public void AddItem(ShoppingItem item)
+    {
+        Items.Add(item);
+    }
+
+    public bool RemoveItemByName(string name)
+    {
+        var item = Items.FirstOrDefault(i => i.Name == name);
+        if (item != null)
+        {
+            Items.Remove(item);
+            return true;
+        }
+        return false;
     }
 }
