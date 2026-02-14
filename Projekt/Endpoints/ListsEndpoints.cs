@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Projekt.Data;
 using Projekt.Models;
 using Projekt.DTOs;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Projekt.Endpoints;
 
@@ -76,6 +77,13 @@ public static class ListsEndpoints {
         });
       await db.SaveChangesAsync();
       return Results.Ok();
+    });
+
+    app.MapGet("/lists/{listId}/with-items", async (int listId, AppDbContext db) => {
+      var list = await db.Lists
+        .Include(l => l.Items)
+        .FirstOrDefaultAsync(l => l.Id == listId);
+      return list is not null ? Results.Ok(list) : Results.NotFound();
     });
 
     app.MapGet("/lists/{listId}/items",
